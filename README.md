@@ -7,7 +7,7 @@ Work in progress.
 ```
 mount -o remount,size=2G /run/archiso/cowspace
 pacman -Sy git
-git clone https://gitlab.com/papanic/x201-arch-install-script.git
+git clone https://gitlab.com/papanic/Px201AI.git
 ```
 
 # sources
