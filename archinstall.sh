@@ -87,7 +87,7 @@ mount /dev/mapper/lvs-home /mnt/home
 let STEP+=1
 echo -e "\n  \e[7m Step ${STEP} \e[27m Install base system.\n"
 
-pacstrap /mnt base base-devel 
+pacstrap /mnt base base-devel lvm2 mkinitcpio linux 
 
 let STEP+=1
 echo -e "\n  \e[7m Step ${STEP} \e[27m Generate fstab.\n"
@@ -104,7 +104,7 @@ echo "LANG=en_US.UTF-8" > /mnt/etc/locale.conf
 let STEP+=1
 echo -e "\n  \e[7m Step ${STEP} \e[27m Set timezone.\n"
 
-sudo rm /mnt/etc/localtime
+sudo rm -f /mnt/etc/localtime
 arch-chroot /mnt ln -s /usr/share/zoneinfo/Europe/Moscow /etc/localtime
 arch-chroot /mnt hwclock --systohc --utc
 
@@ -130,7 +130,7 @@ cat << EOF >> /mnt/etc/mkinitcpio.conf
 MODULES=(ext4)
 BINARIES=()
 FILES=()
-HOOKS=(base systemd sd-vconsole autodetect modconf block sd-encrypt lvm2 filesystems keyboard fsck)
+HOOKS=(base systemd sd-vconsole autodetect modconf block sd-encrypt sd-lvm2 filesystems keyboard fsck)
 EOF
 arch-chroot /mnt mkinitcpio -p linux
 
@@ -146,9 +146,9 @@ sed -i "s/GRUB_TIMEOUT_STYLE=menu/GRUB_TIMEOUT_STYLE=countdown/" /mnt/etc/defaul
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Install wifi-menu requirements.\n"
+echo -e "\n  \e[7m Step ${STEP} \e[27m Install networking requirements.\n"
 
-arch-chroot /mnt pacman -S --noconfirm --needed --quiet dialog wpa_supplicant 
+arch-chroot /mnt pacman -S --noconfirm --needed --quiet dhcpcd dialog wpa_supplicant 
 
 let STEP+=1
 echo -e "\n  \e[7m Step ${STEP} \e[27m Unmount partitions & swap.\n"
