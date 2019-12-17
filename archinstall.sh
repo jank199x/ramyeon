@@ -2,6 +2,8 @@
 
 set -e
 
+source config
+
 source 001-titlecard.sh
 
 steptitle() { echo -e "\n  \e[7m Step $1 \e[27m $2\n"; }
