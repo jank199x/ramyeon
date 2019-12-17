@@ -1,9 +1,5 @@
 #!/bin/bash
 
-set -e
-set -v
-set -v
-
 # Adding 2G to cowspace
 mount -o remount,size=2G /run/archiso/cowspace
 

@@ -1,8 +1,5 @@
 #!/bin/bash
 
-set -e
-set -v
-
 mv /mnt/etc/mkinitcpio.conf /mnt/etc/mkinitcpio.conf.bak
 echo "KEYMAP=us" >/mnt/etc/vconsole.conf
 cat <<EOF >>/mnt/etc/mkinitcpio.conf
