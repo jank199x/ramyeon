@@ -10,6 +10,15 @@ steptitle() { echo -e "\n  \e[7m Step $1 \e[27m $2\n"; }
 
 STEP=0
 
+# Unmount everything
+# in case previous installation failed
+file="steps/510-unmount-all.sh"
+steptitle $STEP $file
+set -v
+. "$file"
+set +v
+
+
 for file in steps/*; do
   if [ -f "$file" ]; then
     ((STEP+=1))
