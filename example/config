@@ -2,8 +2,8 @@
 export LUKSPASS="blep"
 
 # LVM Partition Sizes
-export LVMSWAPSIZE="1G"
-export LVMROOTSIZE="5G"
+export LVMSWAPSIZE="8G"
+export LVMROOTSIZE="25G"
 
 # User details
 export NEWUSERNAME="blep"
