@@ -1,0 +1,13 @@
+# LUKS container password
+export LUKSPASS="blep"
+
+# LVM Partition Sizes
+export LVMSWAPSIZE="1G"
+export LVMROOTSIZE="5G"
+
+# User details
+export NEWUSERNAME="blep"
+export NEWUSERPASS="blep"
+
+# Timezone
+export TIMEZONE="Europe/Moscow"
