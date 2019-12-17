@@ -9,8 +9,5 @@ pacman -Sy --noconfirm --needed --quiet git
 # Cloning repo
 rm -rf Px201AI && git clone https://gitlab.com/papanic/Px201AI.git
 
-# Making script executable
-chmod +x Px201AI/archinstall.sh
-
 # Ready to execute
 set +v
