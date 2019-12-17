@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -v
 
 arch-chroot /mnt pacman -S --noconfirm --needed --quiet grub
 arch-chroot /mnt grub-install --target=i386-pc --recheck /dev/sda

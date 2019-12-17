@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -v
 
 sgdisk --clear \
   --new=1:0:+1MiB --typecode=1:ef02 --change-name=1:biosboot \

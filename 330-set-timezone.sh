@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -v
 
 rm -f /mnt/etc/localtime
 arch-chroot /mnt ln -s /usr/share/zoneinfo/Europe/Moscow /etc/localtime

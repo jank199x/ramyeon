@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -v
 
 lvcreate --size 8G lvs --name swap
 lvcreate --size 25G lvs --name root
