@@ -1,12 +1,12 @@
-# Px201AI
+# PAPARCHI
 
-Before connecting to live system via SSH:
+On live system:
 ```
 passwd
 systemctl start sshd
 ```
 
-After that on main system:
+On main system:
 ```
-ssh -l root host:port /bin/bash < 000-bootstrap.sh
+ssh -l root host:port /bin/bash < bootstrap.sh
 ```
