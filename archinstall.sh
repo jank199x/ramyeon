@@ -10,13 +10,15 @@ echo -e "\n  Papanic x201 Arch Installer v0.1 \n\n  \e[1mPress Enter to continue
 
 STEP=0
 
+steptitle() {echo -e "\n  \e[7m Step $1 \e[27m $2\n";}
+
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Wipe filesystems.\n"
+steptitle $STEP "Wipe filesystems."
 
 wipefs --all /dev/sda
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Partition disk.\n"
+steptitle $STEP "Partition disk."
 
 sgdisk --clear \
 	 --new=1:0:+1MiB 	--typecode=1:ef02 --change-name=1:biosboot \
@@ -25,104 +27,104 @@ sgdisk --clear \
 	   /dev/sda
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Format boot partition.\n"
+steptitle $STEP "Format boot partition."
 
-# Pause  for 3 seconds because mkfs can't find device 
+# Pause for 3 seconds because mkfs can't find device
 # if you try to format it immediately after partitioning
 sleep 3 
 mkfs.ext4 -F /dev/disk/by-partlabel/bootloader
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Create LUKS container.\n"
+steptitle $STEP "Create LUKS container."
 
 cryptsetup luksFormat -v --batch-mode /dev/disk/by-partlabel/cryptsystem
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Unlock LUKS container.\n"
+steptitle $STEP "Unlock LUKS container."
 
 cryptsetup luksOpen /dev/disk/by-partlabel/cryptsystem system
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Create LVM volume group.\n"
+steptitle $STEP "Create LVM volume group."
 
 pvcreate /dev/mapper/system
 vgcreate lvs /dev/mapper/system
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Create LVM partitions.\n"
+steptitle $STEP "Create LVM partitions."
 
 lvcreate --size 8G lvs --name swap
 lvcreate --size 25G lvs --name root
 lvcreate -l +100%FREE lvs --name home
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Format root and home partitions.\n"
+steptitle $STEP "Format root and home partitions."
 
 mkfs.ext4 -F /dev/mapper/lvs-home
 mkfs.ext4 -F /dev/mapper/lvs-root
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Create and use swap.\n"
+steptitle $STEP "Create and use swap."
 
 mkswap /dev/mapper/lvs-swap
 swapon /dev/mapper/lvs-swap
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Mount root.\n"
+steptitle $STEP "Mount root."
 
 mount /dev/mapper/lvs-root /mnt
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Mount boot.\n"
+steptitle $STEP "Mount boot."
 
 mkdir /mnt/boot
 mount /dev/disk/by-partlabel/bootloader /mnt/boot
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Mount home.\n"
+steptitle $STEP "Mount home."
 
 mkdir /mnt/home
 mount /dev/mapper/lvs-home /mnt/home
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Install base system.\n"
+steptitle $STEP "Install base system."
 
 pacstrap /mnt base base-devel lvm2 mkinitcpio linux 
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Generate fstab.\n"
+steptitle $STEP "Generate fstab."
 
 genfstab -pUL /mnt > /mnt/etc/fstab
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Generate locales.\n"
+steptitle $STEP "Generate locales."
 
 echo "en_US.UTF-8 UTF-8" >> /mnt/etc/locale.gen
 arch-chroot /mnt locale-gen
 echo "LANG=en_US.UTF-8" > /mnt/etc/locale.conf
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Set timezone.\n"
+steptitle $STEP "Set timezone."
 
 sudo rm -f /mnt/etc/localtime
 arch-chroot /mnt ln -s /usr/share/zoneinfo/Europe/Moscow /etc/localtime
 arch-chroot /mnt hwclock --systohc --utc
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Set hostname.\n"
+steptitle $STEP "Set hostname."
 
 echo blepbook > /mnt/etc/hostname
 echo "127.0.0.1 blepbook.localdomain blepbook" >> /mnt/etc/hosts
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Add user.\n"
+steptitle $STEP "Add user."
 
 arch-chroot /mnt useradd -m -g users -G wheel blep
 arch-chroot /mnt passwd blep
 echo "%wheel ALL=(ALL) ALL" >> /mnt/etc/sudoers
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Add hooks to initcpio.\n"
+steptitle $STEP "Add hooks to initcpio."
 
 mv /mnt/etc/mkinitcpio.conf /mnt/etc/mkinitcpio.conf.bak
 echo "KEYMAP=us" > /mnt/etc/vconsole.conf
@@ -135,7 +137,7 @@ EOF
 arch-chroot /mnt mkinitcpio -p linux
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Install grub.\n"
+steptitle $STEP "Install grub."
 
 arch-chroot /mnt pacman -S --noconfirm --needed --quiet grub
 arch-chroot /mnt grub-install --target=i386-pc --recheck /dev/sda
@@ -146,12 +148,12 @@ sed -i "s/GRUB_TIMEOUT_STYLE=menu/GRUB_TIMEOUT_STYLE=countdown/" /mnt/etc/defaul
 arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Install networking requirements.\n"
+steptitle $STEP "Install networking requirements."
 
 arch-chroot /mnt pacman -S --noconfirm --needed --quiet dhcpcd dialog wpa_supplicant 
 
 let STEP+=1
-echo -e "\n  \e[7m Step ${STEP} \e[27m Unmount partitions & swap.\n"
+steptitle $STEP "Unmount partitions & swap."
 
 umount -R /mnt
 swapoff -a
