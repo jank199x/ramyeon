@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Pause for 3 seconds because mkfs can't find device
 # if you try to format it immediately after partitioning
 sleep 3

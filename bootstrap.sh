@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -v
 # Adding 2G to cowspace
 mount -o remount,size=2G /run/archiso/cowspace
 
@@ -13,3 +13,4 @@ rm -rf Px201AI && git clone https://gitlab.com/papanic/Px201AI.git
 chmod +x Px201AI/archinstall.sh
 
 # Ready to execute
+set +v
