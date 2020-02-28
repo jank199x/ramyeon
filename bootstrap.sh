@@ -7,7 +7,7 @@ mount -o remount,size=2G /run/archiso/cowspace
 pacman -Sy --noconfirm --needed --quiet git
 
 # Cloning repo
-rm -rf Px201AI && git clone https://gitlab.com/papanic/ramyeon
+rm -rf ramyeon && git clone https://gitlab.com/papanic/ramyeon
 
 # Ready to execute
 set +v
